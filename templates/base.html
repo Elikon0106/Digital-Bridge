@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Digital Bridge — Зрительный зал{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'hall-bg': '#0f172a',
+                        'hall-card': '#1e293b',
+                        'hall-accent': '#3b82f6',
+                        'seat-free': '#22c55e',
+                        'seat-occupied': '#3b82f6',
+                        'seat-selected': '#eab308',
+                        'seat-hover': '#60a5fa',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/static/css/styles.css">
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-hall-bg text-gray-100 min-h-screen font-sans">
+    <!-- Navigation -->
+    <nav class="bg-hall-card border-b border-gray-700 px-6 py-3 flex items-center justify-between shadow-lg">
+        <a href="/" class="flex items-center gap-3 text-xl font-bold text-white hover:text-hall-accent transition-colors">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+            </svg>
+            Digital Bridge
+        </a>
+        <div class="flex items-center gap-4">
+            <a href="/" class="text-gray-300 hover:text-white transition-colors text-sm">Зал</a>
+            <a href="/admin/login" class="bg-hall-accent hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                Админ-панель
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main content -->
+    <main class="{% block main_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

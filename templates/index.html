@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Зрительный зал — Digital Bridge{% endblock %}
+
+{% block main_class %}h-[calc(100vh-57px)] flex overflow-hidden{% endblock %}
+
+{% block content %}
+<!-- Hall area -->
+<div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Toolbar -->
+    <div class="bg-hall-card border-b border-gray-700 px-4 py-2 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-4">
+            <h2 class="text-lg font-semibold text-white">Схема зала</h2>
+            <div class="flex items-center gap-3 text-sm">
+                <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Свободно</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span> Занято</span>
+                <span class="legend-item"><span class="legend-dot" style="background:#eab308"></span> Выбрано</span>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+            <span id="stats-free">—</span> свободно
+            <span class="text-gray-600">|</span>
+            <span id="stats-occupied">—</span> занято
+            <span class="text-gray-600">|</span>
+            <span>500 всего</span>
+        </div>
+    </div>
+
+    <!-- SVG Hall -->
+    <div class="flex-1 hall-container p-4 flex items-center justify-center overflow-auto" id="hall-wrapper">
+        <svg id="hall-svg" viewBox="0 0 800 620" class="w-full max-w-4xl" xmlns="http://www.w3.org/2000/svg">
+            <!-- Will be populated by hall.js -->
+        </svg>
+    </div>
+</div>
+
+<!-- Right side panel -->
+<div id="side-panel" class="side-panel hidden-panel w-96 bg-hall-card border-l border-gray-700 flex-shrink-0 flex flex-col overflow-hidden">
+    <!-- Panel header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700">
+        <h3 class="text-lg font-semibold text-white">Информация о месте</h3>
+        <button onclick="closePanel()" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Panel content -->
+    <div id="panel-content" class="flex-1 overflow-y-auto p-5">
+        <div class="text-center text-gray-500 py-10">
+            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+            </svg>
+            <p>Кликните на место, чтобы увидеть информацию</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/hall.js"></script>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Вход в панель управления — Digital Bridge{% endblock %}
+
+{% block main_class %}flex items-center justify-center min-h-[calc(100vh-64px)]{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-md px-6">
+    <div class="bg-hall-card rounded-2xl shadow-xl p-8 border border-gray-700">
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 bg-hall-accent/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-hall-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-bold text-white">Панель управления</h1>
+            <p class="text-gray-400 mt-2">Введите учётные данные администратора</p>
+        </div>
+
+        {% if error %}
+        <div class="bg-red-900/50 border border-red-500 text-red-300 px-4 py-3 rounded-lg mb-6 text-sm">
+            {{ error }}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="/admin/login" class="space-y-5">
+            <div>
+                <label for="username" class="block text-sm font-medium text-gray-300 mb-2">Логин</label>
+                <input type="text" id="username" name="username" required
+                       class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-hall-accent focus:border-transparent transition-colors"
+                       placeholder="admin">
+            </div>
+            <div>
+                <label for="password" class="block text-sm font-medium text-gray-300 mb-2">Пароль</label>
+                <input type="password" id="password" name="password" required
+                       class="w-full bg-gray-800 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-hall-accent focus:border-transparent transition-colors"
+                       placeholder="••••••••">
+            </div>
+            <button type="submit"
+                    class="w-full bg-hall-accent hover:bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                Войти
+            </button>
+        </form>
+
+        <p class="text-center text-gray-500 text-xs mt-6">
+            <a href="/" class="hover:text-gray-300 transition-colors">← Вернуться к схеме зала</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
