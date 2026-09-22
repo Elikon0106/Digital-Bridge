@@ -1,0 +1,259 @@
+/* ================================================================
+   Digital Bridge — Custom Styles
+   ================================================================ */
+
+/* Seat styling */
+.seat {
+    cursor: pointer;
+    transition: fill 0.15s ease, filter 0.15s ease, stroke 0.15s ease, stroke-width 0.15s ease;
+    border-radius: 4px;
+    transform-box: fill-box;
+    transform-origin: center;
+}
+
+.seat:hover {
+    filter: brightness(1.4);
+    stroke: #fff;
+    stroke-width: 1.5;
+}
+
+.seat-free {
+    fill: #22c55e;
+    opacity: 0.7;
+}
+
+.seat-free:hover {
+    opacity: 1;
+}
+
+.seat-occupied {
+    fill: #3b82f6;
+    opacity: 0.85;
+}
+
+.seat-occupied:hover {
+    opacity: 1;
+}
+
+.seat-selected {
+    fill: #eab308;
+    opacity: 1;
+    stroke: #fff;
+    stroke-width: 2;
+    filter: drop-shadow(0 0 6px rgba(234, 179, 8, 0.6));
+}
+
+/* Screen */
+.hall-screen {
+    fill: #475569;
+    rx: 8;
+    ry: 8;
+}
+
+/* Entrance markers */
+.entrance-marker {
+    fill: #f97316;
+    cursor: default;
+}
+
+/* Side panel */
+.side-panel {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.side-panel.hidden-panel {
+    transform: translateX(100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.side-panel.visible-panel {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+/* Hall SVG container */
+.hall-container {
+    overflow: auto;
+    position: relative;
+}
+
+.hall-container svg {
+    min-width: 700px;
+}
+
+/* Sector labels */
+.sector-label {
+    font-size: 14px;
+    font-weight: 600;
+    fill: #94a3b8;
+    text-anchor: middle;
+    pointer-events: none;
+}
+
+/* Row labels */
+.row-label {
+    font-size: 10px;
+    fill: #64748b;
+    text-anchor: end;
+    pointer-events: none;
+    dominant-baseline: middle;
+}
+
+/* Navigation path highlight */
+.nav-path {
+    stroke: #eab308;
+    stroke-width: 3;
+    stroke-dasharray: 8 4;
+    fill: none;
+    animation: dash 1s linear infinite;
+}
+
+@keyframes dash {
+    to {
+        stroke-dashoffset: -12;
+    }
+}
+
+/* Highlighted seat on navigation */
+.seat-highlight {
+    fill: #ef4444;
+    opacity: 1;
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.4); opacity: 0.7; }
+}
+
+/* Legend */
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: #94a3b8;
+}
+
+.legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #1e293b;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #475569;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #64748b;
+}
+
+/* Admin file upload area */
+.upload-zone {
+    border: 2px dashed #475569;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover,
+.upload-zone.drag-over {
+    border-color: #3b82f6;
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+/* Toast notifications */
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+.toast-success {
+    background: #166534;
+    color: #bbf7d0;
+    border: 1px solid #22c55e;
+}
+
+.toast-error {
+    background: #991b1b;
+    color: #fecaca;
+    border: 1px solid #ef4444;
+}
+
+.toast-info {
+    background: #1e3a5f;
+    color: #bfdbfe;
+    border: 1px solid #3b82f6;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .hall-container svg {
+        min-width: 500px;
+    }
+
+    .side-panel {
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        width: 100%;
+        max-width: 360px;
+        z-index: 50;
+    }
+}
+
+/* Admin guest list table */
+.guest-table {
+    width: 100%;
+}
+
+.guest-table th {
+    position: sticky;
+    top: 0;
+    background: #1e293b;
+    z-index: 5;
+}
+
+/* QR code container on mobile seat page */
+.qr-container {
+    background: white;
+    padding: 16px;
+    border-radius: 12px;
+    display: inline-block;
+}
+
+/* Mini-hall for navigation */
+.mini-hall .seat {
+    cursor: default;
+}
+
+.mini-hall .seat:hover {
+    transform: none;
+    filter: none;
+}
