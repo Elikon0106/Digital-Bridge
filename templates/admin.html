@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Панель управления — Digital Bridge{% endblock %}
+
+{% block main_class %}min-h-[calc(100vh-57px)]{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-6 py-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-white">Панель администратора</h1>
+            <p class="text-gray-400 mt-1">Управление рассадкой гостей</p>
+        </div>
+        <div class="flex items-center gap-3">
+            <div class="bg-hall-card border border-gray-700 rounded-lg px-4 py-2 text-sm">
+                <span class="text-gray-400">Занято:</span>
+                <span id="admin-occupied" class="text-hall-accent font-semibold">{{ occupied_seats }}</span>
+                <span class="text-gray-400">/ {{ total_seats }}</span>
+            </div>
+            <a href="/admin/logout"
+               class="text-gray-400 hover:text-red-400 transition-colors text-sm px-3 py-2 rounded-lg hover:bg-red-900/20">
+                Выйти
+            </a>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Left column: Upload & Controls -->
+        <div class="space-y-6">
+            <!-- Upload Excel -->
+            <div class="bg-hall-card rounded-xl border border-gray-700 p-5">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                    </svg>
+                    Загрузка списка гостей
+                </h2>
+
+                <form id="upload-form" enctype="multipart/form-data">
+                    <div class="upload-zone rounded-xl p-6 text-center cursor-pointer" id="drop-zone"
+                         onclick="document.getElementById('file-input').click()">
+                        <svg class="w-10 h-10 mx-auto mb-3 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                        </svg>
+                        <p class="text-gray-400 text-sm mb-1">Перетащите Excel файл сюда</p>
+                        <p class="text-gray-500 text-xs">или нажмите для выбора (.xlsx)</p>
+                        <p id="file-name" class="text-hall-accent text-sm mt-2 hidden"></p>
+                    </div>
+                    <input type="file" id="file-input" accept=".xlsx,.xls" class="hidden">
+
+                    <button type="submit" id="upload-btn" disabled
+                            class="w-full mt-4 bg-green-600 hover:bg-green-700 disabled:bg-gray-700 disabled:text-gray-500 text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                        Загрузить и распределить
+                    </button>
+                </form>
+
+                <div id="upload-result" class="mt-4 hidden"></div>
+            </div>
+
+            <!-- Actions -->
+            <div class="bg-hall-card rounded-xl border border-gray-700 p-5">
+                <h2 class="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"/>
+                    </svg>
+                    Действия
+                </h2>
+
+                <!-- Move guest -->
+                <div class="mb-4">
+                    <h3 class="text-sm font-medium text-gray-300 mb-2">Переместить гостя</h3>
+                    <div class="space-y-2">
+                        <select id="move-source" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-hall-accent">
+                            <option value="">Откуда (выберите гостя)</option>
+                        </select>
+                        <select id="move-target" class="w-full bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-hall-accent">
+                            <option value="">Куда (выберите место)</option>
+                        </select>
+                        <button onclick="moveGuest()" id="move-btn"
+                                class="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-2 px-4 rounded-lg transition-colors text-sm">
+                            Переместить
+                        </button>
+                    </div>
+                </div>
+
+                <hr class="border-gray-700 my-4">
+
+                <!-- Clear all -->
+                <button onclick="clearAll()"
+                        class="w-full bg-red-900/50 hover:bg-red-900 text-red-300 hover:text-red-200 font-medium py-2 px-4 rounded-lg transition-colors text-sm border border-red-800">
+                    🗑 Очистить все назначения
+                </button>
+            </div>
+        </div>
+
+        <!-- Right column: Hall + Guest list -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Mini hall -->
+            <div class="bg-hall-card rounded-xl border border-gray-700 p-5">
+                <h2 class="text-lg font-semibold text-white mb-4">Схема зала</h2>
+                <div class="hall-container flex justify-center overflow-auto">
+                    <svg id="admin-hall-svg" viewBox="0 0 800 620" class="w-full max-w-3xl" xmlns="http://www.w3.org/2000/svg">
+                    </svg>
+                </div>
+                <div class="flex items-center justify-center gap-4 mt-3 text-sm">
+                    <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Свободно</span>
+                    <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span> Занято</span>
+                </div>
+            </div>
+
+            <!-- Guest list table -->
+            <div class="bg-hall-card rounded-xl border border-gray-700 p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-lg font-semibold text-white">Назначенные гости</h2>
+                    <input type="text" id="guest-search" placeholder="Поиск по ФИО..."
+                           class="bg-gray-800 border border-gray-600 rounded-lg px-3 py-2 text-sm text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-hall-accent w-64">
+                </div>
+                <div class="overflow-y-auto max-h-96 rounded-lg border border-gray-700">
+                    <table class="guest-table text-sm">
+                        <thead>
+                            <tr class="text-left text-gray-400 border-b border-gray-700">
+                                <th class="px-4 py-3 font-medium">ФИО</th>
+                                <th class="px-4 py-3 font-medium">Сектор</th>
+                                <th class="px-4 py-3 font-medium">Ряд</th>
+                                <th class="px-4 py-3 font-medium">Место</th>
+                                <th class="px-4 py-3 font-medium">Действия</th>
+                            </tr>
+                        </thead>
+                        <tbody id="guest-table-body">
+                            <tr><td colspan="5" class="px-4 py-8 text-center text-gray-500">Нет назначенных гостей</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/admin.js"></script>
+{% endblock %}

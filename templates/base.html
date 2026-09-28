@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}AI&DIGITAL BRIDGE — Зрительный зал{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        'hall-bg': '#060918',
+                        'hall-card': 'rgba(15, 23, 42, 0.75)',
+                        'hall-accent': '#3b82f6',
+                        'seat-free': '#22c55e',
+                        'seat-occupied': '#3b82f6',
+                        'seat-selected': '#eab308',
+                        'seat-hover': '#60a5fa',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="/static/css/styles.css?v=2">
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-hall-bg text-gray-100 min-h-screen font-sans">
+    <!-- Animated background -->
+    <div class="fixed inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="bg-orb bg-orb-1"></div>
+        <div class="bg-orb bg-orb-2"></div>
+        <div class="bg-orb bg-orb-3"></div>
+        <div class="bg-orb bg-orb-4"></div>
+        <div class="bg-grid"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="relative z-10 bg-hall-card backdrop-blur-xl border-b border-white/5 px-4 sm:px-6 py-2.5 flex items-center justify-between shadow-lg">
+        <a href="/" class="flex items-center">
+            <img src="/static/logo.png" alt="Logo" class="h-8 w-auto">
+        </a>
+        <a href="/" class="text-gray-400 hover:text-white transition-colors text-sm">Зал</a>
+    </nav>
+
+    <!-- Main content -->
+    <main class="relative z-10 {% block main_class %}{% endblock %}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

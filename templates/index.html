@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Зрительный зал — AI&DIGITAL BRIDGE{% endblock %}
+
+{% block main_class %}h-[calc(100vh-49px)] flex overflow-hidden{% endblock %}
+
+{% block content %}
+<!-- Hall area -->
+<div class="flex-1 flex flex-col overflow-hidden">
+    <!-- Toolbar: search + legend -->
+    <div class="relative z-50 bg-hall-card backdrop-blur-xl border-b border-white/5 px-4 py-2 flex items-center justify-between flex-shrink-0 gap-3 flex-wrap">
+        <!-- Search -->
+        <div class="relative flex-shrink-0" id="search-wrapper">
+            <div class="flex items-center bg-gray-800 border border-gray-600 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-hall-accent focus-within:border-transparent">
+                <svg class="w-4 h-4 ml-3 text-gray-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+                <input type="text" id="guest-search-input" placeholder="Введите ваше имя..."
+                       autocomplete="off"
+                       class="bg-transparent border-none px-3 py-1.5 text-sm text-white placeholder-gray-500 focus:outline-none w-56">
+            </div>
+            <!-- Dropdown results -->
+            <div id="search-results" class="absolute top-full left-0 right-0 mt-1 bg-gray-800 border border-gray-600 rounded-lg shadow-xl z-50 max-h-60 overflow-y-auto hidden"></div>
+        </div>
+
+        <!-- Legend -->
+        <div class="flex items-center gap-3 text-sm">
+            <span class="legend-item"><span class="legend-dot" style="background:#22c55e"></span> Свободно</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#3b82f6"></span> Занято</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#eab308"></span> Выбрано</span>
+            <span class="legend-item"><span class="legend-dot" style="background:#ef4444"></span> Ваше место</span>
+        </div>
+
+        <!-- Stats -->
+        <div class="flex items-center gap-3 text-sm text-gray-400">
+            <span id="stats-free">—</span> свободно
+            <span class="text-gray-600">|</span>
+            <span id="stats-occupied">—</span> занято
+            <span class="text-gray-600">|</span>
+            <span>500 всего</span>
+        </div>
+    </div>
+
+    <!-- Found-guest banner (hidden by default) -->
+    <div id="found-guest-banner" class="hidden bg-green-900/40 border-b border-green-700 px-4 py-2.5 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center gap-3 text-sm">
+            <svg class="w-5 h-5 text-green-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-green-300"><strong id="found-guest-name"></strong> —
+                <span id="found-guest-sector" class="text-green-200"></span>,
+                Ряд <strong id="found-guest-row"></strong>,
+                Место <strong id="found-guest-number"></strong>
+            </span>
+        </div>
+        <button onclick="clearGuestSearch()" class="text-green-400 hover:text-green-200 transition-colors text-xs px-2 py-1 rounded hover:bg-green-900/50">
+            Сбросить
+        </button>
+    </div>
+
+    <!-- SVG Hall -->
+    <div class="flex-1 hall-container p-4 flex items-center justify-center overflow-auto" id="hall-wrapper">
+        <svg id="hall-svg" viewBox="0 0 800 620" class="w-full max-w-4xl" xmlns="http://www.w3.org/2000/svg">
+            <!-- Will be populated by hall.js -->
+        </svg>
+    </div>
+</div>
+
+<!-- Right side panel -->
+<div id="side-panel" class="side-panel hidden-panel w-96 bg-[#060918] border-l border-white/5 flex-shrink-0 flex flex-col overflow-hidden">
+    <!-- Panel header -->
+    <div class="flex items-center justify-between px-5 py-4 border-b border-gray-700">
+        <h3 class="text-lg font-semibold text-white">Информация о месте</h3>
+        <button onclick="closePanel()" class="text-gray-400 hover:text-white transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Panel content -->
+    <div id="panel-content" class="flex-1 overflow-y-auto p-5">
+        <div class="text-center text-gray-500 py-10">
+            <svg class="w-12 h-12 mx-auto mb-3 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                      d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"/>
+            </svg>
+            <p>Кликните на место, чтобы увидеть информацию</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/navigation.js"></script>
+<script src="/static/js/hall.js"></script>
+{% endblock %}
